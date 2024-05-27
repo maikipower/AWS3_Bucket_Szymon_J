@@ -1,0 +1,39 @@
+name: Terraform
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Konfiguracja Terraforma
+    runs-on: ubuntu-latest
+
+    services:
+        localstack:
+          image: localstack/localstack
+          ports:
+            - 4566:4566
+    steps:
+      - name: sprawdzanie repozytorium
+        uses: actions/checkout@v2
+
+      - name: Konfiguracja Terraforma
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.6
+
+      - name: Zainstaluj LocalStack CLI
+        run: |
+          pip install localstack
+          localstack start -d
+        
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
