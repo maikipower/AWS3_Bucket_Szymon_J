@@ -1,0 +1,1 @@
+# AWS3_Bucket_Szymon_J
